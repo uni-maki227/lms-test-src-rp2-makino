@@ -115,10 +115,8 @@ public class Case04 {
 			}
 		}
 
-		//新しいタブでタイトルが正しいか検証
 		assertEquals("よくある質問 | LMS", webDriver.getTitle());
 
-		//スクリーンショットを撮影
 		WebDriverUtils.getEvidence(new Object() {
 		});
 
