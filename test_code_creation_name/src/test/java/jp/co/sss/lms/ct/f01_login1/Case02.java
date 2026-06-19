@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import jp.co.sss.lms.ct.util.WebDriverUtils;
 
@@ -23,6 +24,9 @@ import jp.co.sss.lms.ct.util.WebDriverUtils;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース02 受講生 ログイン 認証失敗")
 public class Case02 {
+
+	@LocalServerPort
+	private int port;
 
 	/** 前処理 */
 	@BeforeAll
@@ -41,7 +45,7 @@ public class Case02 {
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
 		// TODO ここに追加
-		WebDriverUtils.goTo("http://localhost:8080/lms");
+		WebDriverUtils.goTo("http://localhost:" + port + "/lms");
 
 		assertEquals("ログイン | LMS", WebDriverUtils.webDriver.getTitle());
 
