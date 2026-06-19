@@ -10,7 +10,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
 import jp.co.sss.lms.ct.util.WebDriverUtils;
 
@@ -22,9 +21,6 @@ import jp.co.sss.lms.ct.util.WebDriverUtils;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース01 ログイン画面への遷移")
 public class Case01 {
-
-	@LocalServerPort
-	private int port;
 
 	/** 前処理 */
 	@BeforeAll
@@ -44,7 +40,7 @@ public class Case01 {
 	void test01() {
 		// TODO ここに追加
 
-		WebDriverUtils.goTo("http://localhost:" + port + "/lms");
+		WebDriverUtils.goTo("http://localhost:8080/lms");
 
 		assertEquals("ログイン | LMS", WebDriverUtils.webDriver.getTitle());
 
