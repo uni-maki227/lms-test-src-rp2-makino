@@ -13,8 +13,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import jp.co.sss.lms.ct.util.WebDriverUtils;
-
 /**
  * 結合テスト ログイン機能①
  * ケース02
@@ -41,11 +39,11 @@ public class Case02 {
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
 		// TODO ここに追加
-		WebDriverUtils.goTo("http://localhost:8080/lms");
+		goTo("http://localhost:8080/lms");
 
-		assertEquals("ログイン | LMS", WebDriverUtils.webDriver.getTitle());
+		assertEquals("ログイン | LMS", webDriver.getTitle());
 
-		WebDriverUtils.getEvidence(new Object() {
+		getEvidence(new Object() {
 		});
 	}
 
@@ -54,21 +52,19 @@ public class Case02 {
 	@DisplayName("テスト02 DBに登録されていないユーザーでログイン")
 	void test02() {
 		// TODO ここに追加
-		WebDriverUtils.goTo("http://localhost:8080/lms");
+		goTo("http://localhost:8080/lms");
 
-		WebDriverUtils.webDriver.findElement(By.id("loginId")).sendKeys("Test001");
-		WebDriverUtils.webDriver.findElement(By.id("password")).sendKeys("Test001");
+		webDriver.findElement(By.id("loginId")).sendKeys("Test001");
+		webDriver.findElement(By.id("password")).sendKeys("Test001");
 
-		WebDriverUtils.webDriver
-				.findElement(By.cssSelector("input[type='submit']"))
-				.click();
+		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
 
-		WebElement errorMessage = WebDriverUtils.webDriver.findElement(By.className("error"));
+		WebElement errorMessage = webDriver.findElement(By.className("error"));
 
 		assertTrue(errorMessage.isDisplayed());
 		assertTrue(errorMessage.getText().contains("ログインに失敗しました。"));
 
-		WebDriverUtils.getEvidence(new Object() {
+		getEvidence(new Object() {
 		});
 	}
 

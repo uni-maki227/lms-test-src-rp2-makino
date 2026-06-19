@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import jp.co.sss.lms.ct.util.WebDriverUtils;
-
 /**
  * 結合テスト ログイン機能①
  * ケース01
@@ -40,11 +38,11 @@ public class Case01 {
 	void test01() {
 		// TODO ここに追加
 
-		WebDriverUtils.goTo("http://localhost:8080/lms");
+		goTo("http://localhost:8080/lms");
 
-		assertEquals("ログイン | LMS", WebDriverUtils.webDriver.getTitle());
+		assertEquals("ログイン | LMS", webDriver.getTitle());
 
-		WebDriverUtils.getEvidence(new Object() {
+		getEvidence(new Object() {
 		});
 	}
 
