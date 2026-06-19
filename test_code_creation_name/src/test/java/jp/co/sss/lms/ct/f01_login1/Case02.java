@@ -56,8 +56,8 @@ public class Case02 {
 		// TODO ここに追加
 		WebDriverUtils.goTo("http://localhost:8080/lms");
 
-		WebDriverUtils.webDriver.findElement(By.id("loginId")).sendKeys("test999");
-		WebDriverUtils.webDriver.findElement(By.id("password")).sendKeys("test999");
+		WebDriverUtils.webDriver.findElement(By.id("loginId")).sendKeys("Test001");
+		WebDriverUtils.webDriver.findElement(By.id("password")).sendKeys("Test001");
 
 		WebDriverUtils.webDriver
 				.findElement(By.cssSelector("input[type='submit']"))

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
 
 import jp.co.sss.lms.ct.util.WebDriverUtils;
 
@@ -52,6 +53,20 @@ public class Case03 {
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
 		// TODO ここに追加
+		WebDriverUtils.goTo("http://localhost:8080/lms");
+
+		//		ログイン
+		WebDriverUtils.webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
+		WebDriverUtils.webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
+
+		WebDriverUtils.webDriver
+				.findElement(By.cssSelector("input[type='submit']"))
+				.click();
+
+		assertEquals("コース詳細 | LMS", WebDriverUtils.webDriver.getTitle());
+
+		WebDriverUtils.getEvidence(new Object() {
+		});
 	}
 
 }
