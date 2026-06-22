@@ -63,6 +63,8 @@ public class Case05 {
 
 		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
 
+		visibilityTimeout(By.tagName("h2"), 10);
+
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {

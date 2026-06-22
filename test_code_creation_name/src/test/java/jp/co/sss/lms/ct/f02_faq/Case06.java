@@ -61,9 +61,9 @@ public class Case06 {
 		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
 		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
 
-		webDriver
-				.findElement(By.cssSelector("input[type='submit']"))
-				.click();
+		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+
+		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
