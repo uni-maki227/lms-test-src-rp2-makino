@@ -85,7 +85,7 @@ public class Case08 {
 
 		for (WebElement row : rows) {
 
-			// 上から見て最初に「提出済」がある行を探す
+			// 上から見て二番目に「提出済」がある行を探す
 			if (row.getText().contains("提出済み")) {
 
 				// 日付を保存
@@ -98,18 +98,36 @@ public class Case08 {
 						"arguments[0].scrollIntoView({block:'center'});",
 						detailButton);
 
-				detailButton.click();
-				break;
+				((JavascriptExecutor) webDriver).executeScript(
+						"arguments[0].click();",
+						detailButton);
+
+				visibilityTimeout(By.tagName("h2"), 10);
+
+				// セクション詳細画面で週報があるか確認
+				List<WebElement> weeklyReports = webDriver.findElements(By.cssSelector("input[value*='提出済み週報']"));
+
+				if (!weeklyReports.isEmpty()) {
+
+					// 日付を保存
+					reportDate = webDriver.findElement(By.cssSelector("#sectionDetail h2 small")).getText().trim();
+
+					assertEquals("セクション詳細 | LMS", webDriver.getTitle());
+
+					getEvidence(new Object() {
+					});
+
+					break;
+				}
+				// 週報がなければコース詳細画面に戻る
+				webDriver.navigate().back();
+				visibilityTimeout(By.tagName("h2"), 10);
+
+				rows = webDriver.findElements(By.tagName("tr"));
 			}
+
 		}
-		// セクション詳細画面が表示されるまで待機
-		visibilityTimeout(By.tagName("h2"), 10);
 
-		// セクション詳細画面に遷移していることを確認
-		assertEquals("セクション詳細 | LMS", webDriver.getTitle());
-
-		getEvidence(new Object() {
-		});
 	}
 
 	@Test
@@ -117,12 +135,19 @@ public class Case08 {
 	@DisplayName("テスト04 「確認する」ボタンを押下しレポート登録画面に遷移")
 	void test04() {
 		// TODO ここに追加
-		//		「提出済み日報【デモ】を確認する」ボタンを押下する
-		webDriver.findElement(By.cssSelector("input[value*='提出済み']")).click();
+		//		「提出済み週報【デモ】を確認する」ボタンを押下する
+		WebElement weeklyReportButton = webDriver.findElement(By.cssSelector("input[value*='提出済み週報']"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				weeklyReportButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				weeklyReportButton);
 
 		visibilityTimeout(By.tagName("h2"), 10);
 
-		// レポート登録画面に遷移していることを確認
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -134,10 +159,20 @@ public class Case08 {
 	@DisplayName("テスト05 報告内容を修正して「提出する」ボタンを押下しセクション詳細画面に遷移")
 	void test05() {
 		// TODO ここに追加
-		webDriver.findElement(By.className("form-control")).sendKeys(REPORT_TEXT);
+		WebElement report = webDriver.findElement(By.id("content_2"));
+		report.clear();
+		report.sendKeys(REPORT_TEXT);
 
 		//		「提出する」ボタンを押下する
-		webDriver.findElement(By.cssSelector(".btn.btn-primary")).click();
+		WebElement submitButton = webDriver.findElement(By.cssSelector(".btn.btn-primary"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				submitButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				submitButton);
 
 		// セクション詳細画面が表示されるまで待機
 		visibilityTimeout(By.tagName("h2"), 10);
@@ -172,19 +207,32 @@ public class Case08 {
 
 		List<WebElement> rows = reportTable.findElements(By.tagName("tr"));
 
+		String targetDate = reportDate.replaceAll("\\(.+\\)", "");
+
+		boolean clicked = false;
+
 		for (WebElement row : rows) {
 
-			if (row.getText().contains(reportDate)) {
+			//			String targetDate = reportDate.replaceAll("\\(.+\\)", "");
+
+			if (row.getText().contains(targetDate)) {
 
 				WebElement detailButton = row.findElement(By.cssSelector("input[value='詳細']"));
+
+				((JavascriptExecutor) webDriver).executeScript(
+						"arguments[0].scrollIntoView({block:'center'});",
+						detailButton);
 
 				((JavascriptExecutor) webDriver).executeScript(
 						"arguments[0].click();",
 						detailButton);
 
+				clicked = true;
 				break;
 			}
 		}
+
+		assertTrue(clicked);
 
 		visibilityTimeout(By.tagName("h2"), 10);
 
