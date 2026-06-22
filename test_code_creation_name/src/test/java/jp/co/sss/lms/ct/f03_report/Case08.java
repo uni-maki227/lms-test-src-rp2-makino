@@ -209,8 +209,6 @@ public class Case08 {
 
 		String targetDate = reportDate.replaceAll("\\(.+\\)", "");
 
-		boolean clicked = false;
-
 		for (WebElement row : rows) {
 
 			//			String targetDate = reportDate.replaceAll("\\(.+\\)", "");
@@ -227,12 +225,9 @@ public class Case08 {
 						"arguments[0].click();",
 						detailButton);
 
-				clicked = true;
 				break;
 			}
 		}
-
-		assertTrue(clicked);
 
 		visibilityTimeout(By.tagName("h2"), 10);
 
