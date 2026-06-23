@@ -137,6 +137,7 @@ public class ExamService {
 		if (examQuestionForm.getTime() == null) {
 			examQuestionForm.setTime(0);
 		}
+
 		// 回答の再設定
 		int questionCount = examQuestionDto.getQuestionDtoList().size();
 		Short[] answerArray = new Short[questionCount];

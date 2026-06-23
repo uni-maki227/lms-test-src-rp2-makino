@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 /**
  * 結合テスト 勤怠管理機能
@@ -98,6 +101,46 @@ public class Case12 {
 	@DisplayName("テスト05 不適切な内容で修正してエラー表示：出退勤の（時）と（分）のいずれかが空白")
 	void test05() {
 		// TODO ここに追加
+
+		//		出勤、退勤を入力
+		new Select(webDriver.findElement(By.id("startHour0")))
+				.selectByValue("9");
+
+		new Select(webDriver.findElement(By.id("startMinute0")))
+				.selectByValue("");
+
+		new Select(webDriver.findElement(By.id("endHour0")))
+				.selectByValue("");
+
+		new Select(webDriver.findElement(By.id("endMinute0")))
+				.selectByValue("0");
+
+		//		更新」ボタン、確認ダイアログの「OK」を押下する
+		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				updateButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				updateButton);
+
+		webDriver.switchTo().alert().accept();
+
+		//		エラー表示確認
+		assertTrue(webDriver.findElement(By.id("startMinute0"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertTrue(webDriver.findElement(By.id("endHour0"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -105,6 +148,46 @@ public class Case12 {
 	@DisplayName("テスト06 不適切な内容で修正してエラー表示：出勤が空白で退勤に入力あり")
 	void test06() {
 		// TODO ここに追加
+
+		//		出勤、退勤を入力
+		new Select(webDriver.findElement(By.id("startHour0")))
+				.selectByValue("9");
+
+		new Select(webDriver.findElement(By.id("startMinute0")))
+				.selectByValue("0");
+
+		new Select(webDriver.findElement(By.id("endHour0")))
+				.selectByValue("");
+
+		new Select(webDriver.findElement(By.id("endMinute0")))
+				.selectByValue("");
+
+		//		更新」ボタン、確認ダイアログの「OK」を押下する
+		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				updateButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				updateButton);
+
+		webDriver.switchTo().alert().accept();
+
+		//		エラー表示確認
+		assertTrue(webDriver.findElement(By.id("endHour0"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertTrue(webDriver.findElement(By.id("endMinute0"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -112,6 +195,46 @@ public class Case12 {
 	@DisplayName("テスト07 不適切な内容で修正してエラー表示：出勤が退勤よりも遅い時間")
 	void test07() {
 		// TODO ここに追加
+
+		//		出勤、退勤を入力
+		new Select(webDriver.findElement(By.id("startHour0")))
+				.selectByValue("19");
+
+		new Select(webDriver.findElement(By.id("startMinute0")))
+				.selectByValue("0");
+
+		new Select(webDriver.findElement(By.id("endHour0")))
+				.selectByValue("18");
+
+		new Select(webDriver.findElement(By.id("endMinute0")))
+				.selectByValue("0");
+
+		//		更新」ボタン、確認ダイアログの「OK」を押下する
+		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				updateButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				updateButton);
+
+		webDriver.switchTo().alert().accept();
+
+		//		エラー表示確認
+		assertTrue(webDriver.findElement(By.id("endHour0"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertTrue(webDriver.findElement(By.id("endMinute0"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -119,6 +242,46 @@ public class Case12 {
 	@DisplayName("テスト08 不適切な内容で修正してエラー表示：出退勤時間を超える中抜け時間")
 	void test08() {
 		// TODO ここに追加
+
+		//		出勤、退勤を入力
+		new Select(webDriver.findElement(By.id("startHour0")))
+				.selectByValue("9");
+
+		new Select(webDriver.findElement(By.id("startMinute0")))
+				.selectByValue("0");
+
+		new Select(webDriver.findElement(By.id("endHour0")))
+				.selectByValue("12");
+
+		new Select(webDriver.findElement(By.id("endMinute0")))
+				.selectByValue("0");
+
+		//		中抜け時間を入力
+		new Select(webDriver.findElement(By.name("attendanceList[0].blankTime")))
+				.selectByValue("240");
+
+		//		更新」ボタン、確認ダイアログの「OK」を押下する
+		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				updateButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				updateButton);
+
+		webDriver.switchTo().alert().accept();
+
+		//		エラー表示確認
+		assertTrue(webDriver.findElement(By.name("attendanceList[0].blankTime"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -126,6 +289,45 @@ public class Case12 {
 	@DisplayName("テスト09 不適切な内容で修正してエラー表示：備考が100文字超")
 	void test09() {
 		// TODO ここに追加
+
+		//		出勤、退勤を入力
+		new Select(webDriver.findElement(By.id("startHour0")))
+				.selectByValue("9");
+
+		new Select(webDriver.findElement(By.id("startMinute0")))
+				.selectByValue("0");
+
+		new Select(webDriver.findElement(By.id("endHour0")))
+				.selectByValue("18");
+
+		new Select(webDriver.findElement(By.id("endMinute0")))
+				.selectByValue("0");
+
+		//		備考欄に101文字入力
+		webDriver.findElement(By.name("attendanceList[0].note")).sendKeys("あ".repeat(101));
+
+		//		更新」ボタン、確認ダイアログの「OK」を押下する
+		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				updateButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				updateButton);
+
+		webDriver.switchTo().alert().accept();
+
+		//		エラー表示確認
+		assertTrue(webDriver.findElement(By.name("attendanceList[0].note"))
+				.getAttribute("class")
+				.contains("errorInput"));
+
+		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
+
+		getEvidence(new Object() {
+		});
 	}
 
 }

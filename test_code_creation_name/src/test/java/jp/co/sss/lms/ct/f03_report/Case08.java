@@ -85,7 +85,7 @@ public class Case08 {
 
 		for (WebElement row : rows) {
 
-			// 上から見て二番目に「提出済」がある行を探す
+			// 上から見て「提出済」がある行を探す
 			if (row.getText().contains("提出済み")) {
 
 				// 日付を保存
