@@ -152,6 +152,9 @@ public class Case13 {
 
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
+		//		試験残り時間が表示されてるか確認
+		assertTrue(webDriver.findElement(By.id("remainTime")).isDisplayed());
+
 		getEvidence(new Object() {
 		});
 	}
@@ -175,6 +178,9 @@ public class Case13 {
 		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
+
+		//		回答数が表示されてるか確認
+		assertTrue(webDriver.findElement(By.cssSelector("h2 small")).getText().contains("回答数"));
 
 		getEvidence(new Object() {
 		});
