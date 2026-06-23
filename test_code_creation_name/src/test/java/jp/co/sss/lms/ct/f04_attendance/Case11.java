@@ -78,6 +78,32 @@ public class Case11 {
 	void test03() {
 		// TODO ここに追加
 		webDriver.findElement(By.partialLinkText("勤怠")).click();
+		webDriver.findElement(By.partialLinkText("勤怠情報を直接編集する")).click();
+
+		List<WebElement> rows = webDriver.findElements(By.cssSelector("tbody tr"));
+
+		//		すべて空欄にする
+		for (int i = 0; i < rows.size(); i++) {
+			new Select(webDriver.findElement(By.id("startHour" + i))).selectByValue("");
+			new Select(webDriver.findElement(By.id("startMinute" + i))).selectByValue("");
+			new Select(webDriver.findElement(By.id("endHour" + i))).selectByValue("");
+			new Select(webDriver.findElement(By.id("endMinute" + i))).selectByValue("");
+		}
+
+		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].scrollIntoView({block:'center'});",
+				updateButton);
+
+		((JavascriptExecutor) webDriver).executeScript(
+				"arguments[0].click();",
+				updateButton);
+
+		webDriver.switchTo().alert().accept();
+
+		//		勤怠管理画面に遷移することを確認
+		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
