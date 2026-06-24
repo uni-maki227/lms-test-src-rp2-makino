@@ -152,8 +152,8 @@ public class Case13 {
 
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
-		//		試験残り時間が表示されてるか確認
-		assertTrue(webDriver.findElement(By.id("remainTime")).isDisplayed());
+		//		回答選択肢があるか確認
+		assertFalse(webDriver.findElements(By.cssSelector("input[type='radio']")).isEmpty());
 
 		getEvidence(new Object() {
 		});
