@@ -135,7 +135,7 @@ public class Case13 {
 	@Test
 	@Order(5)
 	@DisplayName("テスト05 「試験を開始する」ボタンを押下し試験問題画面に遷移")
-	void test05() {
+	void test05() throws InterruptedException {
 		// TODO ここに追加
 
 		WebElement startButton = webDriver.findElement(By.cssSelector("input[value='試験を開始する']"));
@@ -148,7 +148,7 @@ public class Case13 {
 				"arguments[0].click();",
 				startButton);
 
-		visibilityTimeout(By.tagName("h2"), 10);
+		Thread.sleep(1500);
 
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
@@ -212,6 +212,9 @@ public class Case13 {
 		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
+
+		//		あなたのスコアが表示されてるか確認
+		assertTrue(webDriver.findElement(By.cssSelector("h2 small")).getText().contains("あなたのスコア"));
 
 		getEvidence(new Object() {
 		});
