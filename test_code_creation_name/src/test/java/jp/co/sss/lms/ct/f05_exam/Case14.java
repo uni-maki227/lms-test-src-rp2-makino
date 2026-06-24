@@ -161,6 +161,23 @@ public class Case14 {
 	@DisplayName("テスト06 正答と誤答が半々で「確認画面へ進む」ボタンを押下し試験回答確認画面に遷移")
 	void test06() {
 		// TODO ここに追加
+
+		//		回答を入力
+		int[] answers = { 3, 3, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1 };
+
+		for (int i = 0; i < answers.length; i++) {
+			WebElement radio = webDriver.findElement(
+					By.cssSelector("input[name='answer[" + i + "]'][value='" + answers[i] + "']"));
+
+			((JavascriptExecutor) webDriver).executeScript(
+					"arguments[0].scrollIntoView({block:'center'});",
+					radio);
+
+			((JavascriptExecutor) webDriver).executeScript(
+					"arguments[0].click();",
+					radio);
+		}
+
 		WebElement Button = webDriver.findElement(By.cssSelector("input[value='確認画面へ進む']"));
 
 		((JavascriptExecutor) webDriver).executeScript(
