@@ -12,6 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 
+import jp.co.sss.lms.pages.CoursePage;
+import jp.co.sss.lms.pages.HelpPage;
+import jp.co.sss.lms.pages.LoginPage;
+
 /**
  * 結合テスト よくある質問機能
  * ケース04
@@ -20,11 +24,18 @@ import org.openqa.selenium.By;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース04 よくある質問画面への遷移")
 public class Case04 {
+	private static LoginPage loginPage;
+	private static CoursePage coursePage;
+	private static HelpPage helpPage;
 
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		helpPage = new HelpPage(webDriver);
+
 	}
 
 	/** 後処理 */
@@ -54,10 +65,7 @@ public class Case04 {
 		goTo("http://localhost:8080/lms");
 
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
@@ -70,9 +78,8 @@ public class Case04 {
 	@DisplayName("テスト03 上部メニューの「ヘルプ」リンクからヘルプ画面に遷移")
 	void test03() {
 		// TODO ここに追加
-		webDriver.findElement(By.className("dropdown-toggle")).click();
-
-		webDriver.findElement(By.partialLinkText("ヘルプ")).click();
+		coursePage.openUserMenu();
+		coursePage.clickHelp();
 
 		assertEquals("ヘルプ | LMS", webDriver.getTitle());
 
@@ -85,11 +92,12 @@ public class Case04 {
 	@DisplayName("テスト04 「よくある質問」リンクからよくある質問画面を別タブに開く")
 	void test04() {
 		// TODO ここに追加
+
 		//		現在のタブIDを保存
 		String windowHandle = webDriver.getWindowHandle();
 
 		//「よくある質問」をクリック
-		webDriver.findElement(By.partialLinkText("よくある質問")).click();
+		helpPage.clickFaq();
 
 		//タブ数が「2」であるか確認
 		int page = webDriver.getWindowHandles().size();
@@ -102,6 +110,8 @@ public class Case04 {
 				break;
 			}
 		}
+
+		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("よくある質問 | LMS", webDriver.getTitle());
 

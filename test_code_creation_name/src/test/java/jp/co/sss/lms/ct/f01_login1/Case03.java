@@ -10,7 +10,8 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.By;
+
+import jp.co.sss.lms.pages.LoginPage;
 
 /**
  * 結合テスト ログイン機能①
@@ -20,11 +21,13 @@ import org.openqa.selenium.By;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース03 受講生 ログイン 正常系")
 public class Case03 {
+	private static LoginPage loginPage;
 
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
 	}
 
 	/** 後処理 */
@@ -54,10 +57,7 @@ public class Case03 {
 		goTo("http://localhost:8080/lms");
 
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 

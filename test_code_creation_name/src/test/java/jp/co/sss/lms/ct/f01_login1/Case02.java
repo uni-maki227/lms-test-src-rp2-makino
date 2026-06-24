@@ -10,8 +10,8 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+
+import jp.co.sss.lms.pages.LoginPage;
 
 /**
  * 結合テスト ログイン機能①
@@ -21,11 +21,13 @@ import org.openqa.selenium.WebElement;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース02 受講生 ログイン 認証失敗")
 public class Case02 {
+	private static LoginPage loginPage;
 
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
 	}
 
 	/** 後処理 */
@@ -54,15 +56,10 @@ public class Case02 {
 		// TODO ここに追加
 		goTo("http://localhost:8080/lms");
 
-		webDriver.findElement(By.id("loginId")).sendKeys("Test001");
-		webDriver.findElement(By.id("password")).sendKeys("Test001");
+		loginPage.login("Test001", "Test001");
 
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
-
-		WebElement errorMessage = webDriver.findElement(By.className("error"));
-
-		assertTrue(errorMessage.isDisplayed());
-		assertTrue(errorMessage.getText().contains("ログインに失敗しました。"));
+		assertTrue(loginPage.isErrorDisplayed());
+		assertTrue(loginPage.getErrorMessage().contains("ログインに失敗しました。"));
 
 		getEvidence(new Object() {
 		});
