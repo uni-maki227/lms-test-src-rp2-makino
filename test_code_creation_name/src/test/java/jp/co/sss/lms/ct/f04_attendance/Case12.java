@@ -209,7 +209,7 @@ public class Case12 {
 		new Select(webDriver.findElement(By.id("endMinute0")))
 				.selectByValue("0");
 
-		//		更新」ボタン、確認ダイアログの「OK」を押下する
+		//		「更新」ボタン、確認ダイアログの「OK」を押下する
 		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
 
 		((JavascriptExecutor) webDriver).executeScript(
