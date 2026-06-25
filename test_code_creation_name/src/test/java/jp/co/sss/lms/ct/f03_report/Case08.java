@@ -144,7 +144,6 @@ public class Case08 {
 		sectionPage.clickweeklyReportButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -161,10 +160,8 @@ public class Case08 {
 		//		「提出する」ボタンを押下する
 		reportRegistPage.submit();
 
-		// セクション詳細画面が表示されるまで待機
-		visibilityTimeout(By.tagName("h2"), 10);
-
 		// セクション詳細画面に遷移していることを確認
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("セクション詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -179,7 +176,6 @@ public class Case08 {
 		sectionPage.clickSubmitUserLink();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("ユーザー詳細", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -194,7 +190,6 @@ public class Case08 {
 		userDetail.openDetail(reportDate);
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("レポート詳細 | LMS", webDriver.getTitle());
 
 		// レポート内容を確認

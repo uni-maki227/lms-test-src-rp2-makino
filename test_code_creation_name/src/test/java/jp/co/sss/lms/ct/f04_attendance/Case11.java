@@ -106,6 +106,7 @@ public class Case11 {
 		// TODO ここに追加
 		attendanceDetailPage.openAttendanceUpdateLink();
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -125,7 +126,6 @@ public class Case11 {
 
 		//		勤怠管理画面に遷移することを確認
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		//		勤怠情報が表示されているか確認

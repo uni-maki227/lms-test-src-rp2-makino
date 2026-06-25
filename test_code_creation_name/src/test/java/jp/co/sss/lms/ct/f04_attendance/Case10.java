@@ -82,6 +82,7 @@ public class Case10 {
 		// TODO ここに追加
 		coursePage.openAttendance();
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -98,7 +99,6 @@ public class Case10 {
 		attendanceDetail.clickPunchInButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		//	出勤時間が登録されているか確認
@@ -121,7 +121,6 @@ public class Case10 {
 		attendanceDetail.clickPunchOutButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		//		退勤時間が登録されているかの確認

@@ -99,6 +99,7 @@ public class Case12 {
 		// TODO ここに追加
 		attendanceDetailPage.openAttendanceUpdateLink();
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -126,6 +127,7 @@ public class Case12 {
 				.getAttribute("class")
 				.contains("errorInput"));
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -153,6 +155,7 @@ public class Case12 {
 				.getAttribute("class")
 				.contains("errorInput"));
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -180,6 +183,7 @@ public class Case12 {
 				.getAttribute("class")
 				.contains("errorInput"));
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -203,6 +207,7 @@ public class Case12 {
 				.getAttribute("class")
 				.contains("errorInput"));
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -226,6 +231,7 @@ public class Case12 {
 				.getAttribute("class")
 				.contains("errorInput"));
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {

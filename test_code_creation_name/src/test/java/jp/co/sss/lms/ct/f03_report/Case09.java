@@ -85,7 +85,6 @@ public class Case09 {
 		sectionPage.clickSubmitUserLink();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("ユーザー詳細", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -100,7 +99,6 @@ public class Case09 {
 		userDetail.openReportRegit();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -114,9 +112,8 @@ public class Case09 {
 		// TODO ここに追加
 		reportRegistPage.clearStudyContent();
 
-		visibilityTimeout(By.tagName("h2"), 10);
-
 		// エラーのためレポート登録画面のままであること
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		// 学習項目欄がエラー表示になっていること
@@ -136,9 +133,8 @@ public class Case09 {
 		// TODO ここに追加
 		reportRegistPage.clearUnderstandingLevel();
 
-		visibilityTimeout(By.tagName("h2"), 10);
-
 		// エラーのためレポート登録画面のままであること
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		// 理解度がエラー表示になっていること
@@ -158,9 +154,8 @@ public class Case09 {
 		// TODO ここに追加
 		reportRegistPage.inputAchievementLevel("できる");
 
-		visibilityTimeout(By.tagName("h2"), 10);
-
 		// エラーのためレポート登録画面のままであること
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		// 目標の達成度がエラー表示になっていること
@@ -179,9 +174,8 @@ public class Case09 {
 		// TODO ここに追加
 		reportRegistPage.inputAchievementLevel("20");
 
-		visibilityTimeout(By.tagName("h2"), 10);
-
 		// エラーのためレポート登録画面のままであること
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		// 目標の達成度がエラー表示になっていること
@@ -200,9 +194,8 @@ public class Case09 {
 		// TODO ここに追加
 		reportRegistPage.clearAchievementLevelAndComments();
 
-		visibilityTimeout(By.tagName("h2"), 10);
-
 		// エラーのためレポート登録画面のままであること
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		// 目標の達成度がエラー表示になっていること
@@ -227,7 +220,6 @@ public class Case09 {
 		reportRegistPage.inputCommentsAndReportTextArea("あ".repeat(2001));
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
 
 		assertTrue(webDriver.findElement(By.id("content_1"))
