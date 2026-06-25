@@ -11,8 +11,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+
+import jp.co.sss.lms.pages.AttendanceDetailPage;
+import jp.co.sss.lms.pages.CoursePage;
+import jp.co.sss.lms.pages.LoginPage;
 
 /**
  * 結合テスト 勤怠管理機能
@@ -23,10 +26,19 @@ import org.openqa.selenium.WebElement;
 @DisplayName("ケース10 受講生 勤怠登録 正常系")
 public class Case10 {
 
+	private static LoginPage loginPage;
+
+	private static CoursePage coursePage;
+
+	private static AttendanceDetailPage attendanceDetail;
+
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		attendanceDetail = new AttendanceDetailPage(webDriver);
 	}
 
 	/** 後処理 */
@@ -53,16 +65,10 @@ public class Case10 {
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
 		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
-
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -74,7 +80,7 @@ public class Case10 {
 	@DisplayName("テスト03 上部メニューの「勤怠」リンクから勤怠管理画面に遷移")
 	void test03() {
 		// TODO ここに追加
-		webDriver.findElement(By.partialLinkText("勤怠")).click();
+		coursePage.openAttendance();
 
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
@@ -89,16 +95,7 @@ public class Case10 {
 		// TODO ここに追加
 
 		//	出勤ボタンを押す
-		WebElement punchInButton = webDriver.findElement(By.cssSelector("input[value*='出勤']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				punchInButton);
-
-		punchInButton.click();
-
-		// 確認ダイアログでOK
-		webDriver.switchTo().alert().accept();
+		attendanceDetail.clickPunchInButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 
@@ -121,16 +118,7 @@ public class Case10 {
 	@DisplayName("テスト05 「退勤」ボタンを押下し退勤時間を登録")
 	void test05() {
 		// TODO ここに追加
-		WebElement punchInButton = webDriver.findElement(By.cssSelector("input[value*='退勤']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				punchInButton);
-
-		punchInButton.click();
-
-		// 確認ダイアログでOK
-		webDriver.switchTo().alert().accept();
+		attendanceDetail.clickPunchOutButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 

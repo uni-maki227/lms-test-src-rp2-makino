@@ -11,9 +11,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
+
+import jp.co.sss.lms.pages.AttendanceDetailPage;
+import jp.co.sss.lms.pages.AttendanceUpdatePage;
+import jp.co.sss.lms.pages.CoursePage;
+import jp.co.sss.lms.pages.LoginPage;
 
 /**
  * 結合テスト 勤怠管理機能
@@ -24,10 +26,22 @@ import org.openqa.selenium.support.ui.Select;
 @DisplayName("ケース12 受講生 勤怠直接編集 入力チェック")
 public class Case12 {
 
+	private static LoginPage loginPage;
+
+	private static CoursePage coursePage;
+
+	private static AttendanceDetailPage attendanceDetailPage;
+
+	private static AttendanceUpdatePage attendanceUpdatePage;
+
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		attendanceDetailPage = new AttendanceDetailPage(webDriver);
+		attendanceUpdatePage = new AttendanceUpdatePage(webDriver);
 	}
 
 	/** 後処理 */
@@ -53,17 +67,10 @@ public class Case12 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
-
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -75,8 +82,10 @@ public class Case12 {
 	@DisplayName("テスト03 上部メニューの「勤怠」リンクから勤怠管理画面に遷移")
 	void test03() {
 		// TODO ここに追加
-		webDriver.findElement(By.partialLinkText("勤怠")).click();
+		coursePage.openAttendance();
 
+		//		勤怠管理画面に遷移することを確認
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -88,7 +97,7 @@ public class Case12 {
 	@DisplayName("テスト04 「勤怠情報を直接編集する」リンクから勤怠情報直接変更画面に遷移")
 	void test04() {
 		// TODO ここに追加
-		webDriver.findElement(By.partialLinkText("勤怠情報を直接編集する")).click();
+		attendanceDetailPage.openAttendanceUpdateLink();
 
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
@@ -103,30 +112,10 @@ public class Case12 {
 		// TODO ここに追加
 
 		//		出勤、退勤を入力
-		new Select(webDriver.findElement(By.id("startHour0")))
-				.selectByValue("9");
-
-		new Select(webDriver.findElement(By.id("startMinute0")))
-				.selectByValue("");
-
-		new Select(webDriver.findElement(By.id("endHour0")))
-				.selectByValue("");
-
-		new Select(webDriver.findElement(By.id("endMinute0")))
-				.selectByValue("0");
+		attendanceUpdatePage.setWorkinghours0("9", "", "", "0", "", "");
 
 		//		更新」ボタン、確認ダイアログの「OK」を押下する
-		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				updateButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				updateButton);
-
-		webDriver.switchTo().alert().accept();
+		attendanceUpdatePage.clickUpdateButton();
 
 		//		エラー表示確認
 		assertTrue(webDriver.findElement(By.id("startMinute0"))
@@ -150,30 +139,10 @@ public class Case12 {
 		// TODO ここに追加
 
 		//		出勤、退勤を入力
-		new Select(webDriver.findElement(By.id("startHour0")))
-				.selectByValue("9");
-
-		new Select(webDriver.findElement(By.id("startMinute0")))
-				.selectByValue("0");
-
-		new Select(webDriver.findElement(By.id("endHour0")))
-				.selectByValue("");
-
-		new Select(webDriver.findElement(By.id("endMinute0")))
-				.selectByValue("");
+		attendanceUpdatePage.setWorkinghours0("9", "0", "", "", "", "");
 
 		//		更新」ボタン、確認ダイアログの「OK」を押下する
-		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				updateButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				updateButton);
-
-		webDriver.switchTo().alert().accept();
+		attendanceUpdatePage.clickUpdateButton();
 
 		//		エラー表示確認
 		assertTrue(webDriver.findElement(By.id("endHour0"))
@@ -197,30 +166,10 @@ public class Case12 {
 		// TODO ここに追加
 
 		//		出勤、退勤を入力
-		new Select(webDriver.findElement(By.id("startHour0")))
-				.selectByValue("19");
-
-		new Select(webDriver.findElement(By.id("startMinute0")))
-				.selectByValue("0");
-
-		new Select(webDriver.findElement(By.id("endHour0")))
-				.selectByValue("18");
-
-		new Select(webDriver.findElement(By.id("endMinute0")))
-				.selectByValue("0");
+		attendanceUpdatePage.setWorkinghours0("19", "0", "18", "0", "", "");
 
 		//		「更新」ボタン、確認ダイアログの「OK」を押下する
-		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				updateButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				updateButton);
-
-		webDriver.switchTo().alert().accept();
+		attendanceUpdatePage.clickUpdateButton();
 
 		//		エラー表示確認
 		assertTrue(webDriver.findElement(By.id("endHour0"))
@@ -243,35 +192,11 @@ public class Case12 {
 	void test08() {
 		// TODO ここに追加
 
-		//		出勤、退勤を入力
-		new Select(webDriver.findElement(By.id("startHour0")))
-				.selectByValue("9");
-
-		new Select(webDriver.findElement(By.id("startMinute0")))
-				.selectByValue("0");
-
-		new Select(webDriver.findElement(By.id("endHour0")))
-				.selectByValue("12");
-
-		new Select(webDriver.findElement(By.id("endMinute0")))
-				.selectByValue("0");
-
-		//		中抜け時間を入力
-		new Select(webDriver.findElement(By.name("attendanceList[0].blankTime")))
-				.selectByValue("240");
+		//		出勤、退勤、中抜け時間を入力
+		attendanceUpdatePage.setWorkinghours0("9", "0", "12", "0", "240", "");
 
 		//		更新」ボタン、確認ダイアログの「OK」を押下する
-		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				updateButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				updateButton);
-
-		webDriver.switchTo().alert().accept();
+		attendanceUpdatePage.clickUpdateButton();
 
 		//		エラー表示確認
 		assertTrue(webDriver.findElement(By.name("attendanceList[0].blankTime"))
@@ -290,34 +215,11 @@ public class Case12 {
 	void test09() {
 		// TODO ここに追加
 
-		//		出勤、退勤を入力
-		new Select(webDriver.findElement(By.id("startHour0")))
-				.selectByValue("9");
-
-		new Select(webDriver.findElement(By.id("startMinute0")))
-				.selectByValue("0");
-
-		new Select(webDriver.findElement(By.id("endHour0")))
-				.selectByValue("18");
-
-		new Select(webDriver.findElement(By.id("endMinute0")))
-				.selectByValue("0");
-
-		//		備考欄に101文字入力
-		webDriver.findElement(By.name("attendanceList[0].note")).sendKeys("あ".repeat(101));
+		//		出勤、退勤、備考欄に101文字を入力
+		attendanceUpdatePage.setWorkinghours0("9", "0", "12", "0", "", "あ".repeat(101));
 
 		//		更新」ボタン、確認ダイアログの「OK」を押下する
-		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				updateButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				updateButton);
-
-		webDriver.switchTo().alert().accept();
+		attendanceUpdatePage.clickUpdateButton();
 
 		//		エラー表示確認
 		assertTrue(webDriver.findElement(By.name("attendanceList[0].note"))

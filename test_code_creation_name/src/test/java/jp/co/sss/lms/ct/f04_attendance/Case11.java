@@ -13,9 +13,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
+
+import jp.co.sss.lms.pages.AttendanceDetailPage;
+import jp.co.sss.lms.pages.AttendanceUpdatePage;
+import jp.co.sss.lms.pages.CoursePage;
+import jp.co.sss.lms.pages.LoginPage;
 
 /**
  * 結合テスト 勤怠管理機能
@@ -26,10 +29,22 @@ import org.openqa.selenium.support.ui.Select;
 @DisplayName("ケース11 受講生 勤怠直接編集 正常系")
 public class Case11 {
 
+	private static LoginPage loginPage;
+
+	private static CoursePage coursePage;
+
+	private static AttendanceDetailPage attendanceDetailPage;
+
+	private static AttendanceUpdatePage attendanceUpdatePage;
+
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		attendanceDetailPage = new AttendanceDetailPage(webDriver);
+		attendanceUpdatePage = new AttendanceUpdatePage(webDriver);
 	}
 
 	/** 後処理 */
@@ -55,17 +70,10 @@ public class Case11 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
-
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -77,34 +85,14 @@ public class Case11 {
 	@DisplayName("テスト03 上部メニューの「勤怠」リンクから勤怠管理画面に遷移")
 	void test03() {
 		// TODO ここに追加
-		webDriver.findElement(By.partialLinkText("勤怠")).click();
-		webDriver.findElement(By.partialLinkText("勤怠情報を直接編集する")).click();
+		coursePage.openAttendance();
+		attendanceDetailPage.openAttendanceUpdateLink();
 
-		List<WebElement> rows = webDriver.findElements(By.cssSelector("tbody tr"));
+		attendanceUpdatePage.setAllWorkinghours("", "", "", "");
 
-		//		すべて空欄にする
-		for (int i = 0; i < rows.size(); i++) {
-			new Select(webDriver.findElement(By.id("startHour" + i))).selectByValue("");
-			new Select(webDriver.findElement(By.id("startMinute" + i))).selectByValue("");
-			new Select(webDriver.findElement(By.id("endHour" + i))).selectByValue("");
-			new Select(webDriver.findElement(By.id("endMinute" + i))).selectByValue("");
-		}
-
-		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				updateButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				updateButton);
-
-		webDriver.switchTo().alert().accept();
-
+		attendanceUpdatePage.clickUpdateButton();
 		//		勤怠管理画面に遷移することを確認
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -116,7 +104,7 @@ public class Case11 {
 	@DisplayName("テスト04 「勤怠情報を直接編集する」リンクから勤怠情報直接変更画面に遷移")
 	void test04() {
 		// TODO ここに追加
-		webDriver.findElement(By.partialLinkText("勤怠情報を直接編集する")).click();
+		attendanceDetailPage.openAttendanceUpdateLink();
 
 		assertEquals("勤怠情報変更｜LMS", webDriver.getTitle());
 
@@ -131,35 +119,9 @@ public class Case11 {
 		// TODO ここに追加
 
 		//		全日程に勤怠情報を入力
-		List<WebElement> startHours = webDriver.findElements(By.cssSelector("select[id^='startHour']"));
+		attendanceUpdatePage.setAllWorkinghours("9", "0", "18", "0");
 
-		for (int i = 0; i < startHours.size(); i++) {
-
-			new Select(webDriver.findElement(By.id("startHour" + i)))
-					.selectByValue("9");
-
-			new Select(webDriver.findElement(By.id("startMinute" + i)))
-					.selectByValue("0");
-
-			new Select(webDriver.findElement(By.id("endHour" + i)))
-					.selectByValue("18");
-
-			new Select(webDriver.findElement(By.id("endMinute" + i)))
-					.selectByValue("0");
-
-		}
-
-		WebElement updateButton = webDriver.findElement(By.cssSelector(".update-button"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				updateButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				updateButton);
-
-		webDriver.switchTo().alert().accept();
+		attendanceUpdatePage.clickUpdateButton();
 
 		//		勤怠管理画面に遷移することを確認
 		visibilityTimeout(By.tagName("h2"), 10);

@@ -66,8 +66,6 @@ public class Case05 {
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
 		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
-
 		//		ログイン
 		loginPage.login("StudentAA01", "StudentBB01");
 
@@ -84,7 +82,7 @@ public class Case05 {
 	void test03() {
 		// TODO ここに追加
 		coursePage.openUserMenu();
-		coursePage.clickHelp();
+		coursePage.openHelp();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("ヘルプ | LMS", webDriver.getTitle());

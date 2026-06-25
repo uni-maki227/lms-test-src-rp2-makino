@@ -54,7 +54,6 @@ public class Case02 {
 	@DisplayName("テスト02 DBに登録されていないユーザーでログイン")
 	void test02() {
 		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
 
 		loginPage.login("Test001", "Test001");
 

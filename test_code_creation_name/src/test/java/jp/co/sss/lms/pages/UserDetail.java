@@ -49,4 +49,21 @@ public class UserDetail {
 			}
 		}
 	}
+
+	public void openReportRegit() {
+		List<WebElement> rows = reportTable.findElements(By.tagName("tr"));
+
+		for (WebElement row : rows) {
+
+			if (row.getText().contains("週報")) {
+
+				WebElement correctionButton = row.findElement(By.cssSelector("input[value='修正する']"));
+
+				scrollAndClick(correctionButton);
+
+				break;
+			}
+
+		}
+	}
 }

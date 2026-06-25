@@ -20,6 +20,9 @@ public class CoursePage {
 	@FindBy(partialLinkText = "ヘルプ")
 	private WebElement helpLink;
 
+	@FindBy(partialLinkText = "勤怠")
+	private WebElement attendanceLink;
+
 	public CoursePage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -29,8 +32,12 @@ public class CoursePage {
 		userMenu.click();
 	}
 
-	public void clickHelp() {
+	public void openHelp() {
 		helpLink.click();
+	}
+
+	public void openAttendance() {
+		attendanceLink.click();
 	}
 
 	public void clickFirstUnsubmittedDetail() {
