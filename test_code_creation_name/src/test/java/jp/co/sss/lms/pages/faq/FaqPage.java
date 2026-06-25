@@ -1,4 +1,4 @@
-package jp.co.sss.lms.pages;
+package jp.co.sss.lms.pages.faq;
 
 import java.util.List;
 

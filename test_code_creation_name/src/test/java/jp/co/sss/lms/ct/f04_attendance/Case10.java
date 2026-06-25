@@ -13,9 +13,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import jp.co.sss.lms.pages.AttendanceDetailPage;
-import jp.co.sss.lms.pages.CoursePage;
-import jp.co.sss.lms.pages.LoginPage;
+import jp.co.sss.lms.pages.attendance.AttendanceDetailPage;
+import jp.co.sss.lms.pages.course.CoursePage;
+import jp.co.sss.lms.pages.login.LoginPage;
 
 /**
  * 結合テスト 勤怠管理機能

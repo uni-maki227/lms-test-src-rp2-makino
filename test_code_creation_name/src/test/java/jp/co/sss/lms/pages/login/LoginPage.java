@@ -1,4 +1,4 @@
-package jp.co.sss.lms.pages;
+package jp.co.sss.lms.pages.login;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

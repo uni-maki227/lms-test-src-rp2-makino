@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 
-import jp.co.sss.lms.pages.CoursePage;
-import jp.co.sss.lms.pages.FaqPage;
-import jp.co.sss.lms.pages.HelpPage;
-import jp.co.sss.lms.pages.LoginPage;
+import jp.co.sss.lms.pages.course.CoursePage;
+import jp.co.sss.lms.pages.faq.FaqPage;
+import jp.co.sss.lms.pages.help.HelpPage;
+import jp.co.sss.lms.pages.login.LoginPage;
 
 /**
  * 結合テスト よくある質問機能

@@ -19,6 +19,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
+import jp.co.sss.lms.pages.course.CoursePage;
+import jp.co.sss.lms.pages.exam.ExamAnswerCheckPage;
+import jp.co.sss.lms.pages.exam.ExamQuestionPage;
+import jp.co.sss.lms.pages.exam.ExamResultPage;
+import jp.co.sss.lms.pages.exam.ExamStartPage;
+import jp.co.sss.lms.pages.login.LoginPage;
+import jp.co.sss.lms.pages.section.SectionPage;
+
 /**
  * 結合テスト 試験実施機能
  * ケース13
@@ -31,10 +39,31 @@ public class Case13 {
 	/** テスト07およびテスト08 試験実施日時 */
 	static Date date;
 
+	private static LoginPage loginPage;
+
+	private static CoursePage coursePage;
+
+	private static SectionPage sectionPage;
+
+	private static ExamStartPage examStartPage;
+
+	private static ExamQuestionPage examQuestionPage;
+
+	private static ExamAnswerCheckPage examAnswerCheckPage;
+
+	private static ExamResultPage examResultPage;
+
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		sectionPage = new SectionPage(webDriver);
+		examStartPage = new ExamStartPage(webDriver);
+		examQuestionPage = new ExamQuestionPage(webDriver);
+		examAnswerCheckPage = new ExamAnswerCheckPage(webDriver);
+		examResultPage = new ExamResultPage(webDriver);
 	}
 
 	/** 後処理 */
@@ -60,17 +89,10 @@ public class Case13 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
-
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -83,28 +105,10 @@ public class Case13 {
 	void test03() {
 		// TODO ここに追加
 		// 一覧の行を取得
-		List<WebElement> rows = webDriver.findElements(By.tagName("tr"));
-
-		for (WebElement row : rows) {
-
-			// 上から見て最初に「試験有」がある行を探す
-			if (row.getText().contains("試験有")) {
-
-				WebElement detailButton = row.findElement(By.cssSelector(".btn.btn-default"));
-
-				// ボタンが画面中央に来るようにスクロール
-				((JavascriptExecutor) webDriver).executeScript(
-						"arguments[0].scrollIntoView({block:'center'});",
-						detailButton);
-
-				detailButton.click();
-				break;
-			}
-		}
-		// セクション詳細画面が表示されるまで待機
-		visibilityTimeout(By.tagName("h2"), 10);
+		coursePage.clickFirstUnsubmittedDetail("試験有");
 
 		// セクション詳細画面に遷移していることを確認
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("セクション詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -117,10 +121,9 @@ public class Case13 {
 	void test04() {
 		// TODO ここに追加
 
-		webDriver.findElement(By.cssSelector("input[value='詳細']")).click();
+		sectionPage.clickDetailButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("試験【ITリテラシー①】 | LMS", webDriver.getTitle());
 
 		//		最終の試験回数を表示
@@ -138,18 +141,11 @@ public class Case13 {
 	void test05() throws InterruptedException {
 		// TODO ここに追加
 
-		WebElement startButton = webDriver.findElement(By.cssSelector("input[value='試験を開始する']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				startButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				startButton);
+		examStartPage.clickStartButton();
 
 		Thread.sleep(1500);
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
 		//		回答選択肢があるか確認
@@ -165,18 +161,9 @@ public class Case13 {
 	void test06() {
 		// TODO ここに追加
 
-		WebElement Button = webDriver.findElement(By.cssSelector("input[value='確認画面へ進む']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				Button);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				Button);
+		examQuestionPage.clickNextButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
 		//		回答数が表示されてるか確認
@@ -197,20 +184,9 @@ public class Case13 {
 
 		Thread.sleep(1500);
 
-		WebElement Button = webDriver.findElement(By.id("sendButton"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				Button);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				Button);
-
-		webDriver.switchTo().alert().accept();
+		examAnswerCheckPage.clickSendButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
 		//		あなたのスコアが表示されてるか確認
@@ -226,15 +202,7 @@ public class Case13 {
 	void test08() throws ParseException {
 		// TODO ここに追加
 
-		WebElement Button = webDriver.findElement(By.cssSelector("input[value='戻る']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				Button);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				Button);
+		examResultPage.clickBackButton();
 
 		//最終のテスト実施日時と該当テストの実施日時が一致するか確認
 		List<WebElement> rows = webDriver.findElements(
@@ -253,7 +221,6 @@ public class Case13 {
 				new SimpleDateFormat("yyyyMMddHHmm").format(result));
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("試験【ITリテラシー①】 | LMS", webDriver.getTitle());
 
 		((JavascriptExecutor) webDriver).executeScript(

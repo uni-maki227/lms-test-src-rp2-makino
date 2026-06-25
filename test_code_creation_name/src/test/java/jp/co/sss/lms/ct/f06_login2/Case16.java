@@ -11,8 +11,10 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
+
+import jp.co.sss.lms.pages.login.LoginPage;
+import jp.co.sss.lms.pages.password.ChangePasswordPage;
+import jp.co.sss.lms.pages.user.AgreeSecurityPage;
 
 /**
  * 結合テスト ログイン機能②
@@ -23,10 +25,19 @@ import org.openqa.selenium.WebElement;
 @DisplayName("ケース16 受講生 初回ログイン 変更パスワード未入力")
 public class Case16 {
 
+	private static LoginPage loginPage;
+
+	private static AgreeSecurityPage agreeSecurityPage;
+
+	private static ChangePasswordPage changePasswordPage;
+
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		agreeSecurityPage = new AgreeSecurityPage(webDriver);
+		changePasswordPage = new ChangePasswordPage(webDriver);
 	}
 
 	/** 後処理 */
@@ -52,17 +63,10 @@ public class Case16 {
 	@Order(2)
 	@DisplayName("テスト02 DBに初期登録された未ログインの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
-
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA02");
-		webDriver.findElement(By.id("password")).sendKeys("StudentAA02");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA02", "StudentAA02");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("セキュリティ規約 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -75,14 +79,9 @@ public class Case16 {
 	void test03() {
 		// TODO ここに追加
 
-		//		同意しますをクリック
-		webDriver.findElement(By.name("securityFlg")).click();
-
-		//		「次へ」ボタンを押下
-		webDriver.findElement(By.cssSelector("button[type='submit']")).click();
+		agreeSecurityPage.agree();
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -93,13 +92,9 @@ public class Case16 {
 	@Order(4)
 	@DisplayName("テスト04 パスワードを未入力で「変更」ボタン押下")
 	void test04() {
-		// TODO ここに追加
 
-		//		変更ボタンを押下
-		webDriver.findElement(By.cssSelector("button[type='submit']")).click();
-		//		確認モーダルの変更ボタンを押下
-		visibilityTimeout(By.id("upd-btn"), 10);
-		webDriver.findElement(By.id("upd-btn")).click();
+		//		「変更」ボタン、確認モーダルの変更ボタン押下
+		changePasswordPage.clickSubmitButton();
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("currentPassword"), 10);
@@ -119,34 +114,18 @@ public class Case16 {
 	@Order(5)
 	@DisplayName("テスト05 20文字以上の変更パスワードを入力し「変更」ボタン押下")
 	void test05() {
-		// TODO ここに追加
 
 		//		入力値を入力
-		webDriver.findElement(By.id("currentPassword")).sendKeys("StudentAA02");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB022222222222");
-		webDriver.findElement(By.id("passwordConfirm")).sendKeys("StudentBB022222222222");
+		changePasswordPage.inputPassword("StudentAA02", "StudentBB022222222222", "StudentBB022222222222");
 
-		//		変更ボタンを押下
-		WebElement changeButton = webDriver.findElement(By.cssSelector("button[type='submit']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				changeButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				changeButton);
-
-		//		確認モーダルの変更ボタンを押下
-		visibilityTimeout(By.id("upd-btn"), 10);
-		webDriver.findElement(By.id("upd-btn")).click();
+		//		「変更」ボタン、確認モーダルの変更ボタン押下
+		changePasswordPage.clickSubmitButton();
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("password"), 10);
 		assertTrue(webDriver.findElement(By.id("password")).getAttribute("class").contains("errorInput"));
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -160,31 +139,16 @@ public class Case16 {
 	void test06() {
 		// TODO ここに追加 
 		//		入力値を入力
-		webDriver.findElement(By.id("currentPassword")).sendKeys("StudentAA02");
-		webDriver.findElement(By.id("password")).sendKeys("studentbb02");
-		webDriver.findElement(By.id("passwordConfirm")).sendKeys("studentbb02");
+		changePasswordPage.inputPassword("StudentAA02", "studentbb02", "studentbb02");
 
-		//		変更ボタンを押下
-		WebElement changeButton = webDriver.findElement(By.cssSelector("button[type='submit']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				changeButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				changeButton);
-
-		//		確認モーダルの変更ボタンを押下
-		visibilityTimeout(By.id("upd-btn"), 10);
-		webDriver.findElement(By.id("upd-btn")).click();
+		//		「変更」ボタン、確認モーダルの変更ボタン押下
+		changePasswordPage.clickSubmitButton();
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("password"), 10);
 		assertTrue(webDriver.findElement(By.id("password")).getAttribute("class").contains("errorInput"));
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -197,31 +161,16 @@ public class Case16 {
 	void test07() {
 		// TODO ここに追加
 		//		入力値を入力
-		webDriver.findElement(By.id("currentPassword")).sendKeys("StudentAA02");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB02");
-		webDriver.findElement(By.id("passwordConfirm")).sendKeys("StudentCC02");
+		changePasswordPage.inputPassword("StudentAA02", "StudentBB02", "StudentCC02");
 
-		//		変更ボタンを押下
-		WebElement changeButton = webDriver.findElement(By.cssSelector("button[type='submit']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				changeButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				changeButton);
-
-		//		確認モーダルの変更ボタンを押下
-		visibilityTimeout(By.id("upd-btn"), 10);
-		webDriver.findElement(By.id("upd-btn")).click();
+		//		「変更」ボタン、確認モーダルの変更ボタン押下
+		changePasswordPage.clickSubmitButton();
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("password"), 10);
 		assertTrue(webDriver.findElement(By.id("password")).getAttribute("class").contains("errorInput"));
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {

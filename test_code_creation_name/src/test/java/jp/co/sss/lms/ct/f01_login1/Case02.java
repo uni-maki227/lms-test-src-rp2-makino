@@ -7,11 +7,12 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+
+import jp.co.sss.lms.pages.login.LoginPage;
+
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-
-import jp.co.sss.lms.pages.LoginPage;
 
 /**
  * 結合テスト ログイン機能①

@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 
-import jp.co.sss.lms.pages.CoursePage;
-import jp.co.sss.lms.pages.LoginPage;
-import jp.co.sss.lms.pages.ReportRegistPage;
-import jp.co.sss.lms.pages.SectionPage;
+import jp.co.sss.lms.pages.course.CoursePage;
+import jp.co.sss.lms.pages.login.LoginPage;
+import jp.co.sss.lms.pages.report.ReportRegistPage;
+import jp.co.sss.lms.pages.section.SectionPage;
 
 /**
  * 結合テスト レポート機能
@@ -82,12 +82,10 @@ public class Case07 {
 		// TODO ここに追加
 
 		// 一覧の行を取得
-		coursePage.clickFirstUnsubmittedDetail();
-
-		// セクション詳細画面が表示されるまで待機
-		visibilityTimeout(By.tagName("h2"), 10);
+		coursePage.clickFirstUnsubmittedDetail("未提出");
 
 		// セクション詳細画面に遷移していることを確認
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("セクション詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -131,7 +129,8 @@ public class Case07 {
 		// セクション詳細画面に遷移していることを確認
 		assertEquals("セクション詳細 | LMS", webDriver.getTitle());
 
-		assertTrue(sectionPage.isSubmitted());
+		assertTrue(webDriver.findElement(By.cssSelector("input[value*='提出済み週報']")).getAttribute("value")
+				.contains("提出済み"));
 
 		getEvidence(new Object() {
 		});

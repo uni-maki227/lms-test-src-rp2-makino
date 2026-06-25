@@ -1,4 +1,4 @@
-package jp.co.sss.lms.pages;
+package jp.co.sss.lms.pages.user;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 

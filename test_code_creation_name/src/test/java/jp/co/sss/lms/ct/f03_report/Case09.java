@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 
-import jp.co.sss.lms.pages.LoginPage;
-import jp.co.sss.lms.pages.ReportRegistPage;
-import jp.co.sss.lms.pages.SectionPage;
-import jp.co.sss.lms.pages.UserDetail;
+import jp.co.sss.lms.pages.login.LoginPage;
+import jp.co.sss.lms.pages.report.ReportRegistPage;
+import jp.co.sss.lms.pages.section.SectionPage;
+import jp.co.sss.lms.pages.user.UserDetail;
 
 /**
  * 結合テスト レポート機能
@@ -82,7 +82,7 @@ public class Case09 {
 	@DisplayName("テスト03 上部メニューの「ようこそ○○さん」リンクからユーザー詳細画面に遷移")
 	void test03() {
 		// TODO ここに追加
-		sectionPage.clickSubmitUserLink();
+		sectionPage.openUserMenu();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("ユーザー詳細", webDriver.getTitle());

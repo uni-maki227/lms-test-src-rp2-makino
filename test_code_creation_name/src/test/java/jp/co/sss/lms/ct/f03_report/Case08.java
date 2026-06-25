@@ -15,12 +15,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import jp.co.sss.lms.pages.CoursePage;
-import jp.co.sss.lms.pages.LoginPage;
-import jp.co.sss.lms.pages.ReportDetailPage;
-import jp.co.sss.lms.pages.ReportRegistPage;
-import jp.co.sss.lms.pages.SectionPage;
-import jp.co.sss.lms.pages.UserDetail;
+import jp.co.sss.lms.pages.course.CoursePage;
+import jp.co.sss.lms.pages.login.LoginPage;
+import jp.co.sss.lms.pages.report.ReportDetailPage;
+import jp.co.sss.lms.pages.report.ReportRegistPage;
+import jp.co.sss.lms.pages.section.SectionPage;
+import jp.co.sss.lms.pages.user.UserDetail;
 
 /**
  * 結合テスト レポート機能
@@ -141,7 +141,7 @@ public class Case08 {
 	void test04() {
 		// TODO ここに追加
 		//		「提出済み週報【デモ】を確認する」ボタンを押下する
-		sectionPage.clickweeklyReportButton();
+		sectionPage.clickWeeklyReportButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("レポート登録 | LMS", webDriver.getTitle());
@@ -173,7 +173,7 @@ public class Case08 {
 	@DisplayName("テスト06 上部メニューの「ようこそ○○さん」リンクからユーザー詳細画面に遷移")
 	void test06() {
 		// TODO ここに追加
-		sectionPage.clickSubmitUserLink();
+		sectionPage.openUserMenu();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("ユーザー詳細", webDriver.getTitle());

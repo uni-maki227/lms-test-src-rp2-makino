@@ -1,4 +1,4 @@
-package jp.co.sss.lms.pages;
+package jp.co.sss.lms.pages.report;
 
 import static org.junit.jupiter.api.Assertions.*;
 

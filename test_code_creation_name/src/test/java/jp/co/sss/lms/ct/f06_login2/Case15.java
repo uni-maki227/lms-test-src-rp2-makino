@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 
+import jp.co.sss.lms.pages.login.LoginPage;
+import jp.co.sss.lms.pages.user.AgreeSecurityPage;
+
 /**
  * 結合テスト ログイン機能②
  * ケース15
@@ -21,10 +24,16 @@ import org.openqa.selenium.By;
 @DisplayName("ケース15 受講生 初回ログイン 利用規約に不同意")
 public class Case15 {
 
+	private static LoginPage loginPage;
+
+	private static AgreeSecurityPage agreeSecurityPage;
+
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		agreeSecurityPage = new AgreeSecurityPage(webDriver);
 	}
 
 	/** 後処理 */
@@ -50,17 +59,10 @@ public class Case15 {
 	@Order(2)
 	@DisplayName("テスト02 DBに初期登録された未ログインの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
-		goTo("http://localhost:8080/lms");
-
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA02");
-		webDriver.findElement(By.id("password")).sendKeys("StudentAA02");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA02", "StudentAA02");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("セキュリティ規約 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -73,15 +75,13 @@ public class Case15 {
 	void test03() {
 		// TODO ここに追加
 
-		//		「次へ」ボタンを押下
-		webDriver.findElement(By.cssSelector("button[type='submit']")).click();
+		agreeSecurityPage.disagree();
 
 		//		エラーメッセージが表示されてるか確認
 		assertTrue(webDriver.findElement(By.className("error")).getText().contains("セキュリティ規約への同意は必須です。"));
 
 		//		画面遷移してないか確認
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("セキュリティ規約 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {

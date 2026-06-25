@@ -1,4 +1,4 @@
-package jp.co.sss.lms.pages;
+package jp.co.sss.lms.pages.section;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 
@@ -35,20 +35,22 @@ public class SectionPage {
 		submitReportButton.click();
 	}
 
-	public void clickweeklyReportButton() {
+	private void scrollAndClick(WebElement element) {
 		((JavascriptExecutor) webDriver).executeScript(
 				"arguments[0].scrollIntoView({block:'center'});",
-				weeklyReportButton);
+				element);
 
 		((JavascriptExecutor) webDriver).executeScript(
 				"arguments[0].click();",
-				weeklyReportButton);
+				element);
 	}
 
-	public boolean isSubmitted() {
-		return submittedDateButton
-				.getAttribute("value")
-				.contains("提出済み");
+	public void clickWeeklyReportButton() {
+		scrollAndClick(weeklyReportButton);
+	}
+
+	public void clickDetailButton() {
+		webDriver.findElement(By.cssSelector("input[value='詳細']")).click();
 	}
 
 	public boolean hasWeeklyReport() {
@@ -66,11 +68,7 @@ public class SectionPage {
 				.trim();
 	}
 
-	public void openWeeklyReport() {
-		weeklyReportButton.click();
-	}
-
-	public void clickSubmitUserLink() {
+	public void openUserMenu() {
 		userMenu.click();
 	}
 }

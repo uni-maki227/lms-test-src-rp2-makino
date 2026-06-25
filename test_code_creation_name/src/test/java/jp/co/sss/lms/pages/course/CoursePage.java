@@ -1,4 +1,4 @@
-package jp.co.sss.lms.pages;
+package jp.co.sss.lms.pages.course;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 
@@ -40,13 +40,13 @@ public class CoursePage {
 		attendanceLink.click();
 	}
 
-	public void clickFirstUnsubmittedDetail() {
+	public void clickFirstUnsubmittedDetail(String text) {
 
 		List<WebElement> rows = driver.findElements(By.tagName("tr"));
 
 		for (WebElement row : rows) {
 
-			if (row.getText().contains("未提出")) {
+			if (row.getText().contains(text)) {
 
 				WebElement detailButton = row.findElement(By.cssSelector(".btn.btn-default"));
 
