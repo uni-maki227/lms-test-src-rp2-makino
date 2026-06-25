@@ -3,8 +3,6 @@ package jp.co.sss.lms.ct.f03_report;
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -13,8 +11,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
+
+import jp.co.sss.lms.pages.CoursePage;
+import jp.co.sss.lms.pages.LoginPage;
+import jp.co.sss.lms.pages.ReportRegistPage;
+import jp.co.sss.lms.pages.SectionPage;
 
 /**
  * 結合テスト レポート機能
@@ -24,11 +25,20 @@ import org.openqa.selenium.WebElement;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース07 受講生 レポート新規登録(日報) 正常系")
 public class Case07 {
+	private static LoginPage loginPage;
+	private static CoursePage coursePage;
+
+	private static SectionPage sectionPage;
+	private static ReportRegistPage reportRegistPage;
 
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		sectionPage = new SectionPage(webDriver);
+		reportRegistPage = new ReportRegistPage(webDriver);
 	}
 
 	/** 後処理 */
@@ -58,13 +68,9 @@ public class Case07 {
 		goTo("http://localhost:8080/lms");
 
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -78,24 +84,8 @@ public class Case07 {
 		// TODO ここに追加
 
 		// 一覧の行を取得
-		List<WebElement> rows = webDriver.findElements(By.tagName("tr"));
+		coursePage.clickFirstUnsubmittedDetail();
 
-		for (WebElement row : rows) {
-
-			// 上から見て最初に「未提出」がある行を探す
-			if (row.getText().contains("未提出")) {
-
-				WebElement detailButton = row.findElement(By.cssSelector(".btn.btn-default"));
-
-				// ボタンが画面中央に来るようにスクロール
-				((JavascriptExecutor) webDriver).executeScript(
-						"arguments[0].scrollIntoView({block:'center'});",
-						detailButton);
-
-				detailButton.click();
-				break;
-			}
-		}
 		// セクション詳細画面が表示されるまで待機
 		visibilityTimeout(By.tagName("h2"), 10);
 
@@ -114,7 +104,7 @@ public class Case07 {
 		// TODO ここに追加
 
 		//		「日報【デモ】を提出する」ボタンを押下する
-		webDriver.findElement(By.cssSelector("input[value*='を提出する']")).click();
+		sectionPage.clickSubmitReport();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 
@@ -132,10 +122,10 @@ public class Case07 {
 	void test05() {
 		// TODO ここに追加
 
-		webDriver.findElement(By.className("form-control")).sendKeys("Case07：受講生　レポート新規登録（日報）正常系");
+		reportRegistPage.inputDateReport("Case07：受講生 レポート新規登録（日報）正常系");
 
 		//		「提出する」ボタンを押下する
-		webDriver.findElement(By.cssSelector(".btn.btn-primary")).click();
+		reportRegistPage.submit();
 
 		// セクション詳細画面が表示されるまで待機
 		visibilityTimeout(By.tagName("h2"), 10);
@@ -143,8 +133,7 @@ public class Case07 {
 		// セクション詳細画面に遷移していることを確認
 		assertEquals("セクション詳細 | LMS", webDriver.getTitle());
 
-		assertTrue(webDriver.findElement(By.cssSelector("input[value*='提出済み']"))
-				.getAttribute("value").contains("提出済み"));
+		assertTrue(sectionPage.isSubmitted());
 
 		getEvidence(new Object() {
 		});

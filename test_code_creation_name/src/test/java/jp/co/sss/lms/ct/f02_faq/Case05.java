@@ -3,8 +3,6 @@ package jp.co.sss.lms.ct.f02_faq;
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -13,8 +11,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
+
+import jp.co.sss.lms.pages.CoursePage;
+import jp.co.sss.lms.pages.FaqPage;
+import jp.co.sss.lms.pages.HelpPage;
+import jp.co.sss.lms.pages.LoginPage;
 
 /**
  * 結合テスト よくある質問機能
@@ -24,17 +25,26 @@ import org.openqa.selenium.WebElement;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース05 キーワード検索 正常系")
 public class Case05 {
+	private static LoginPage loginPage;
+	private static CoursePage coursePage;
+	private static HelpPage helpPage;
+	private static FaqPage faqPage;
 
 	/** 前処理 */
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		helpPage = new HelpPage(webDriver);
+		faqPage = new FaqPage(webDriver);
 	}
 
 	/** 後処理 */
 	@AfterAll
 	static void after() {
 		closeDriver();
+
 	}
 
 	@Test
@@ -58,12 +68,7 @@ public class Case05 {
 		goTo("http://localhost:8080/lms");
 
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
-
-		visibilityTimeout(By.tagName("h2"), 10);
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
@@ -76,9 +81,8 @@ public class Case05 {
 	@DisplayName("テスト03 上部メニューの「ヘルプ」リンクからヘルプ画面に遷移")
 	void test03() {
 		// TODO ここに追加
-		webDriver.findElement(By.className("dropdown-toggle")).click();
-
-		webDriver.findElement(By.partialLinkText("ヘルプ")).click();
+		coursePage.openUserMenu();
+		coursePage.clickHelp();
 
 		assertEquals("ヘルプ | LMS", webDriver.getTitle());
 
@@ -95,7 +99,7 @@ public class Case05 {
 		String windowHandle = webDriver.getWindowHandle();
 
 		//「よくある質問」をクリック
-		webDriver.findElement(By.partialLinkText("よくある質問")).click();
+		helpPage.clickFaq();
 
 		//タブ数が「2」であるか確認
 		int page = webDriver.getWindowHandles().size();
@@ -109,6 +113,8 @@ public class Case05 {
 			}
 		}
 
+		visibilityTimeout(By.tagName("h2"), 10);
+
 		assertEquals("よくある質問 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -120,23 +126,14 @@ public class Case05 {
 	@DisplayName("テスト05 キーワード検索で該当キーワードを含む検索結果だけ表示")
 	void test05() {
 		// TODO ここに追加
-		webDriver.findElement(By.id("form")).sendKeys("研修");
+		faqPage.search("研修");
 
-		webDriver.findElement(By.cssSelector("input[value='検索']")).click();
-
-		List<WebElement> questions = webDriver.findElements(By.className("mb10"));
-
-		String resultText = "";
-		for (WebElement question : questions) {
-			resultText += question.getText();
-		}
+		String resultText = faqPage.getSearchResultText();
 
 		assertTrue(resultText.contains("助成金書類の作成方法が分かりません"));
 		assertTrue(resultText.contains("研修の申し込みはどのようにすれば良いですか？"));
 
-		//		検索結果が見える位置までスクロール
-		((JavascriptExecutor) webDriver)
-				.executeScript("arguments[0].scrollIntoView();", questions.get(0));
+		faqPage.scrollToFirstQuestion(webDriver);
 
 		getEvidence(new Object() {
 		});
@@ -149,12 +146,9 @@ public class Case05 {
 	void test06() {
 		// TODO ここに追加
 
-		webDriver.findElement(By.cssSelector("input[value='クリア']")).click();
+		faqPage.clear();
 
-		//		空欄であるかの確認
-		assertTrue(webDriver.findElement(By.id("form"))
-				.getAttribute("value")
-				.isEmpty());
+		assertTrue(faqPage.isKeywordEmpty());
 
 		getEvidence(new Object() {
 		});

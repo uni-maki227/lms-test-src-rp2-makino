@@ -13,8 +13,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+
+import jp.co.sss.lms.pages.CoursePage;
+import jp.co.sss.lms.pages.LoginPage;
+import jp.co.sss.lms.pages.ReportDetailPage;
+import jp.co.sss.lms.pages.ReportRegistPage;
+import jp.co.sss.lms.pages.SectionPage;
+import jp.co.sss.lms.pages.UserDetail;
 
 /**
  * 結合テスト レポート機能
@@ -24,7 +30,15 @@ import org.openqa.selenium.WebElement;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース08 受講生 レポート修正(週報) 正常系")
 public class Case08 {
+	private static LoginPage loginPage;
+	private static CoursePage coursePage;
 
+	private static SectionPage sectionPage;
+	private static ReportRegistPage reportRegistPage;
+
+	private static ReportDetailPage reportDetailPage;
+
+	private static UserDetail userDetail;
 	private static final String REPORT_TEXT = "Case08：受講生　レポート修正（週報）正常系";
 
 	private static String reportDate;
@@ -33,6 +47,13 @@ public class Case08 {
 	@BeforeAll
 	static void before() {
 		createDriver();
+		loginPage = new LoginPage(webDriver);
+		coursePage = new CoursePage(webDriver);
+		sectionPage = new SectionPage(webDriver);
+		reportRegistPage = new ReportRegistPage(webDriver);
+		reportDetailPage = new ReportDetailPage(webDriver);
+		userDetail = new UserDetail(webDriver);
+
 	}
 
 	/** 後処理 */
@@ -62,13 +83,9 @@ public class Case08 {
 		goTo("http://localhost:8080/lms");
 
 		//		ログイン
-		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
-		webDriver.findElement(By.id("password")).sendKeys("StudentBB01");
-
-		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
+		loginPage.login("StudentAA01", "StudentBB01");
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -81,7 +98,7 @@ public class Case08 {
 	void test03() {
 		// TODO ここに追加
 		// 一覧の行を取得
-		List<WebElement> rows = webDriver.findElements(By.tagName("tr"));
+		List<WebElement> rows = coursePage.getRows();
 
 		for (WebElement row : rows) {
 
@@ -89,29 +106,17 @@ public class Case08 {
 			if (row.getText().contains("提出済み")) {
 
 				// 日付を保存
-				reportDate = row.findElement(By.tagName("td")).getText();
+				reportDate = coursePage.getDate(row);
 
-				WebElement detailButton = row.findElement(By.cssSelector(".btn.btn-default"));
-
-				// ボタンが画面中央に来るようにスクロール
-				((JavascriptExecutor) webDriver).executeScript(
-						"arguments[0].scrollIntoView({block:'center'});",
-						detailButton);
-
-				((JavascriptExecutor) webDriver).executeScript(
-						"arguments[0].click();",
-						detailButton);
+				coursePage.clickDetail(row);
 
 				visibilityTimeout(By.tagName("h2"), 10);
 
 				// セクション詳細画面で週報があるか確認
-				List<WebElement> weeklyReports = webDriver.findElements(By.cssSelector("input[value*='提出済み週報']"));
-
-				if (!weeklyReports.isEmpty()) {
+				if (sectionPage.hasWeeklyReport()) {
 
 					// 日付を保存
-					reportDate = webDriver.findElement(By.cssSelector("#sectionDetail h2 small")).getText().trim();
-
+					reportDate = sectionPage.getReportDate();
 					assertEquals("セクション詳細 | LMS", webDriver.getTitle());
 
 					getEvidence(new Object() {
@@ -119,11 +124,12 @@ public class Case08 {
 
 					break;
 				}
+
 				// 週報がなければコース詳細画面に戻る
 				webDriver.navigate().back();
 				visibilityTimeout(By.tagName("h2"), 10);
 
-				rows = webDriver.findElements(By.tagName("tr"));
+				rows = coursePage.getRows();
 			}
 
 		}
@@ -136,15 +142,7 @@ public class Case08 {
 	void test04() {
 		// TODO ここに追加
 		//		「提出済み週報【デモ】を確認する」ボタンを押下する
-		WebElement weeklyReportButton = webDriver.findElement(By.cssSelector("input[value*='提出済み週報']"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				weeklyReportButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				weeklyReportButton);
+		sectionPage.clickweeklyReportButton();
 
 		visibilityTimeout(By.tagName("h2"), 10);
 
@@ -159,20 +157,10 @@ public class Case08 {
 	@DisplayName("テスト05 報告内容を修正して「提出する」ボタンを押下しセクション詳細画面に遷移")
 	void test05() {
 		// TODO ここに追加
-		WebElement report = webDriver.findElement(By.id("content_2"));
-		report.clear();
-		report.sendKeys(REPORT_TEXT);
+		reportRegistPage.inpuyWeekReport(REPORT_TEXT);
 
 		//		「提出する」ボタンを押下する
-		WebElement submitButton = webDriver.findElement(By.cssSelector(".btn.btn-primary"));
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				submitButton);
-
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].click();",
-				submitButton);
+		reportRegistPage.submit();
 
 		// セクション詳細画面が表示されるまで待機
 		visibilityTimeout(By.tagName("h2"), 10);
@@ -189,7 +177,9 @@ public class Case08 {
 	@DisplayName("テスト06 上部メニューの「ようこそ○○さん」リンクからユーザー詳細画面に遷移")
 	void test06() {
 		// TODO ここに追加
-		webDriver.findElement(By.partialLinkText("ようこそ")).click();
+		sectionPage.clickSubmitUserLink();
+
+		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("ユーザー詳細", webDriver.getTitle());
 
@@ -202,47 +192,18 @@ public class Case08 {
 	@DisplayName("テスト07 該当レポートの「詳細」ボタンを押下しレポート詳細画面で修正内容が反映される")
 	void test07() {
 		// TODO ここに追加
-
-		WebElement reportTable = webDriver.findElement(By.xpath("//h3[text()='レポート']/following-sibling::table"));
-
-		List<WebElement> rows = reportTable.findElements(By.tagName("tr"));
-
-		String targetDate = reportDate.replaceAll("\\(.+\\)", "");
-
-		for (WebElement row : rows) {
-
-			//			String targetDate = reportDate.replaceAll("\\(.+\\)", "");
-
-			if (row.getText().contains(targetDate)) {
-
-				WebElement detailButton = row.findElement(By.cssSelector("input[value='詳細']"));
-
-				((JavascriptExecutor) webDriver).executeScript(
-						"arguments[0].scrollIntoView({block:'center'});",
-						detailButton);
-
-				((JavascriptExecutor) webDriver).executeScript(
-						"arguments[0].click();",
-						detailButton);
-
-				break;
-			}
-		}
+		userDetail.openDetail(reportDate);
 
 		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("レポート詳細 | LMS", webDriver.getTitle());
 
 		// レポート内容を確認
-		WebElement reportDetailTable = webDriver
-				.findElement(By.xpath("//h3[text()='報告レポート']/following-sibling::table"));
-
-		String actualText = reportDetailTable.getText();
-
-		assertTrue(actualText.contains(REPORT_TEXT));
+		reportDetailPage.assertReportText(REPORT_TEXT);
 
 		getEvidence(new Object() {
 		});
+
 	}
 
 }
