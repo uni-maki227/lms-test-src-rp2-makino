@@ -54,6 +54,7 @@ public class Case05 {
 		// TODO ここに追加
 		goTo("http://localhost:8080/lms");
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("ログイン | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -70,6 +71,7 @@ public class Case05 {
 		//		ログイン
 		loginPage.login("StudentAA01", "StudentBB01");
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -84,6 +86,7 @@ public class Case05 {
 		coursePage.openUserMenu();
 		coursePage.clickHelp();
 
+		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("ヘルプ | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -114,7 +117,6 @@ public class Case05 {
 		}
 
 		visibilityTimeout(By.tagName("h2"), 10);
-
 		assertEquals("よくある質問 | LMS", webDriver.getTitle());
 
 		getEvidence(new Object() {
@@ -133,7 +135,7 @@ public class Case05 {
 		assertTrue(resultText.contains("助成金書類の作成方法が分かりません"));
 		assertTrue(resultText.contains("研修の申し込みはどのようにすれば良いですか？"));
 
-		faqPage.scrollToFirstQuestion(webDriver);
+		faqPage.scrollToFirstQuestion();
 
 		getEvidence(new Object() {
 		});

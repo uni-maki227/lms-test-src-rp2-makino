@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 
 import jp.co.sss.lms.pages.CoursePage;
 import jp.co.sss.lms.pages.FaqPage;
@@ -135,8 +134,7 @@ public class Case06 {
 		assertTrue(resultText.contains("研修の申し込みはどのようにすれば良いですか？"));
 
 		//		検索結果が見える位置までスクロール
-		((JavascriptExecutor) webDriver)
-				.executeScript("arguments[0].scrollIntoView();", webDriver.findElements(By.className("mb10")).get(0));
+		faqPage.scrollToFirstQuestion();
 
 		getEvidence(new Object() {
 		});
@@ -153,8 +151,7 @@ public class Case06 {
 		assertTrue(faqPage.isAnswerDisplayed());
 
 		//		検索結果が見える位置までスクロール
-		((JavascriptExecutor) webDriver)
-				.executeScript("arguments[0].scrollIntoView();", webDriver.findElements(By.className("mb10")).get(0));
+		faqPage.scrollToFirstQuestion();
 
 		getEvidence(new Object() {
 		});

@@ -30,7 +30,11 @@ public class FaqPage {
 	@FindBy(className = "mb10")
 	private List<WebElement> questions;
 
+	@FindBy(className = "mb10")
+	private List<WebElement> question;
+
 	public FaqPage(WebDriver driver) {
+		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
 
@@ -58,7 +62,7 @@ public class FaqPage {
 		return keywordForm.getAttribute("value").isEmpty();
 	}
 
-	public void scrollToFirstQuestion(WebDriver driver) {
+	public void scrollToFirstQuestion() {
 		((JavascriptExecutor) driver)
 				.executeScript("arguments[0].scrollIntoView();",
 						questions.get(0));
