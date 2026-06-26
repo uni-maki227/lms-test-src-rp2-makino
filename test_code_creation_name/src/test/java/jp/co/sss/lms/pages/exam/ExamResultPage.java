@@ -2,6 +2,7 @@ package jp.co.sss.lms.pages.exam;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,5 +32,11 @@ public class ExamResultPage {
 
 	public void clickBackButton() {
 		scrollAndClick(backButton);
+	}
+
+	public boolean hasScore() {
+		return driver.findElement(By.cssSelector("h2 small"))
+				.getText()
+				.contains("あなたのスコア");
 	}
 }

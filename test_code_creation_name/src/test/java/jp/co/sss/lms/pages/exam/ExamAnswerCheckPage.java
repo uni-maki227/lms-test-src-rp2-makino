@@ -2,6 +2,7 @@ package jp.co.sss.lms.pages.exam;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,5 +33,11 @@ public class ExamAnswerCheckPage {
 	public void clickSendButton() {
 		scrollAndClick(sendButton);
 		webDriver.switchTo().alert().accept();
+	}
+
+	public boolean hasAnswerCount() {
+		return driver.findElement(By.cssSelector("h2 small"))
+				.getText()
+				.contains("回答数");
 	}
 }

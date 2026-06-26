@@ -44,4 +44,10 @@ public class ExamQuestionPage {
 			scrollAndClick(radio);
 		}
 	}
+
+	public boolean hasAnswerChoices() {
+		return driver.findElements(
+				By.cssSelector("input[type='radio']"))
+				.isEmpty();
+	}
 }

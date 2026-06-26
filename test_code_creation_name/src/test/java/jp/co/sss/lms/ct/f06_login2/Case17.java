@@ -99,10 +99,6 @@ public class Case17 {
 		//		「変更」ボタン、確認モーダルの変更ボタン押下
 		changePasswordPage.clickSubmitButton();
 
-		//		確認モーダルの変更ボタンを押下
-		visibilityTimeout(By.id("upd-btn"), 10);
-		webDriver.findElement(By.id("upd-btn")).click();
-
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("コース詳細 | LMS", webDriver.getTitle());
 

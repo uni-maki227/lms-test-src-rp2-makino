@@ -18,6 +18,9 @@ public class AttendanceUpdatePage {
 	@FindBy(css = ".update-button")
 	private WebElement updateButton;
 
+	@FindBy(css = "select[id^='startHour']")
+	private List<WebElement> startHoursElements;
+
 	public AttendanceUpdatePage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -29,9 +32,9 @@ public class AttendanceUpdatePage {
 			String endHour,
 			String endMinute) {
 
-		List<WebElement> startHours = webDriver.findElements(By.cssSelector("select[id^='startHour']"));
+		//		List<WebElement> startHours = webDriver.findElements(By.cssSelector("select[id^='startHour']"));
 
-		for (int i = 0; i < startHours.size(); i++) {
+		for (int i = 0; i < startHoursElements.size(); i++) {
 
 			new Select(webDriver.findElement(By.id("startHour" + i)))
 					.selectByValue(startHour);

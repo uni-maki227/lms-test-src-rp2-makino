@@ -27,4 +27,9 @@ public class AgreeSecurityPage {
 		//		「次へ」ボタンを押下
 		webDriver.findElement(By.cssSelector("button[type='submit']")).click();
 	}
+
+	public String getErrorMessage() {
+		return driver.findElement(By.className("error"))
+				.getText();
+	}
 }

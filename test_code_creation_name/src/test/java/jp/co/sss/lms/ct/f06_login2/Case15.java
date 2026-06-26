@@ -78,8 +78,7 @@ public class Case15 {
 		agreeSecurityPage.disagree();
 
 		//		エラーメッセージが表示されてるか確認
-		assertTrue(webDriver.findElement(By.className("error")).getText().contains("セキュリティ規約への同意は必須です。"));
-
+		assertTrue(loginPage.getErrorMessage().contains("セキュリティ規約への同意は必須です。"));
 		//		画面遷移してないか確認
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("セキュリティ規約 | LMS", webDriver.getTitle());

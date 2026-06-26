@@ -98,10 +98,9 @@ public class Case16 {
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("currentPassword"), 10);
-		assertTrue(webDriver.findElement(By.id("currentPassword")).getAttribute("class").contains("errorInput"));
-		assertTrue(webDriver.findElement(By.id("password")).getAttribute("class").contains("errorInput"));
-		assertTrue(webDriver.findElement(By.id("passwordConfirm")).getAttribute("class").contains("errorInput"));
-
+		assertTrue(changePasswordPage.hasErrorInput("currentPassword"));
+		assertTrue(changePasswordPage.hasErrorInput("password"));
+		assertTrue(changePasswordPage.hasErrorInput("passwordConfirm"));
 		visibilityTimeout(By.tagName("h2"), 10);
 
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());
@@ -123,7 +122,7 @@ public class Case16 {
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("password"), 10);
-		assertTrue(webDriver.findElement(By.id("password")).getAttribute("class").contains("errorInput"));
+		assertTrue(changePasswordPage.hasErrorInput("password"));
 
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());
@@ -146,8 +145,7 @@ public class Case16 {
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("password"), 10);
-		assertTrue(webDriver.findElement(By.id("password")).getAttribute("class").contains("errorInput"));
-
+		assertTrue(changePasswordPage.hasErrorInput("password"));
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());
 
@@ -168,7 +166,7 @@ public class Case16 {
 
 		//		エラー表示確認
 		visibilityTimeout(By.id("password"), 10);
-		assertTrue(webDriver.findElement(By.id("password")).getAttribute("class").contains("errorInput"));
+		assertTrue(changePasswordPage.hasErrorInput("password"));
 
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("パスワード変更 | LMS", webDriver.getTitle());

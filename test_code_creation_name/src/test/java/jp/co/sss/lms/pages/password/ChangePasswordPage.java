@@ -45,4 +45,10 @@ public class ChangePasswordPage {
 		webDriver.findElement(By.id("passwordConfirm")).sendKeys(passwordConfirm);
 
 	}
+
+	public boolean hasErrorInput(String id) {
+		return driver.findElement(By.id(id))
+				.getAttribute("class")
+				.contains("errorInput");
+	}
 }

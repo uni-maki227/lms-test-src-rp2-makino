@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 
 import jp.co.sss.lms.pages.course.CoursePage;
 import jp.co.sss.lms.pages.exam.ExamAnswerCheckPage;
@@ -149,7 +147,7 @@ public class Case13 {
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
 		//		回答選択肢があるか確認
-		assertFalse(webDriver.findElements(By.cssSelector("input[type='radio']")).isEmpty());
+		assertFalse(examQuestionPage.hasAnswerChoices());
 
 		getEvidence(new Object() {
 		});
@@ -167,8 +165,7 @@ public class Case13 {
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
 		//		回答数が表示されてるか確認
-		assertTrue(webDriver.findElement(By.cssSelector("h2 small")).getText().contains("回答数"));
-
+		assertTrue(examAnswerCheckPage.hasAnswerCount());
 		getEvidence(new Object() {
 		});
 	}
@@ -190,7 +187,7 @@ public class Case13 {
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
 		//		あなたのスコアが表示されてるか確認
-		assertTrue(webDriver.findElement(By.cssSelector("h2 small")).getText().contains("あなたのスコア"));
+		assertTrue(examResultPage.hasScore());
 
 		getEvidence(new Object() {
 		});
@@ -205,12 +202,7 @@ public class Case13 {
 		examResultPage.clickBackButton();
 
 		//最終のテスト実施日時と該当テストの実施日時が一致するか確認
-		List<WebElement> rows = webDriver.findElements(
-				By.xpath("//h3[text()='過去の試験結果']/following::table[1]//tr[position()>1]"));
-
-		WebElement lastRow = rows.get(rows.size() - 1);
-
-		String resultDate = lastRow.findElements(By.tagName("td")).get(3).getText();
+		String resultDate = examStartPage.getLastExamResultDate();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH時mm分ss秒");
 
@@ -223,9 +215,7 @@ public class Case13 {
 		visibilityTimeout(By.tagName("h2"), 10);
 		assertEquals("試験【ITリテラシー①】 | LMS", webDriver.getTitle());
 
-		((JavascriptExecutor) webDriver).executeScript(
-				"arguments[0].scrollIntoView({block:'center'});",
-				lastRow);
+		examStartPage.scrollToLastExamResult();
 
 		getEvidence(new Object() {
 		});
