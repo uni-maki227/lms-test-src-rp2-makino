@@ -142,7 +142,7 @@ public class Case14 {
 		assertEquals("ITリテラシー① | LMS", webDriver.getTitle());
 
 		//		回答選択肢があるか確認
-		assertFalse(examQuestionPage.hasAnswerChoices());
+		assertTrue(examQuestionPage.hasAnswerChoices());
 
 		getEvidence(new Object() {
 		});

@@ -46,7 +46,7 @@ public class ExamQuestionPage {
 	}
 
 	public boolean hasAnswerChoices() {
-		return driver.findElements(
+		return !driver.findElements(
 				By.cssSelector("input[type='radio']"))
 				.isEmpty();
 	}
